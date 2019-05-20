@@ -10,4 +10,8 @@ export class AppComponent {
   title = 'async-loader';
 
   constructor(private auth: AuthService) {}
+
+  login() {
+    this.auth.startAuthentication();
+  }
 }

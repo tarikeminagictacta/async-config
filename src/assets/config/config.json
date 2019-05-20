@@ -1,5 +1,5 @@
 {
   "client_id": "co-ctx-client-dev",
-  "redirect_uri": "https://localhost:5000/assets/login-redirect.html",
+  "redirect_uri": "https://localhost:5000/auth-callback",
   "base_uri": "http://localhost:9100"
 }

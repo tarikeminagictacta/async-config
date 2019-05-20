@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { ConfigService } from './config.service';
-import { UserManager, WebStorageStateStore } from 'oidc-client';
+import { UserManager, UserManagerSettings, WebStorageStateStore, User } from 'oidc-client';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private _userManager: UserManager;
+  private configuration: any;
+  user: User;
 
-  constructor(private config: ConfigService) {
-    console.log(this.config.config);
-    this._userManager = new UserManager({
+  get userManagerSettings(): UserManagerSettings {
+    return {
       authority: 'https://fs.constructiv-int.be/adfs',
       client_id: 'co-ctx-client-dev',
       redirect_uri: `${this.config.config.redirect_uri}`,
@@ -19,9 +19,31 @@ export class AuthService {
       post_logout_redirect_uri: 'https://ctx.constructiv-dev.be/',
       userStore: new WebStorageStateStore({ store: window.localStorage }),
       loadUserInfo: false
-    });
-    this._userManager.getUser().then(user => {
+    };
+  }
+
+  get userManager(): UserManager {
+    return new UserManager(this.userManagerSettings);
+  }
+
+  constructor(private config: ConfigService) {
+    this.configuration = this.config.config;
+    this.userManager.getUser().then(user => {
+      this.user = user;
+      console.log(user);
       console.log('user fetched');
+    });
+  }
+
+  startAuthentication(): Promise<any> {
+    return this.userManager.signinRedirect();
+  }
+
+  completeAuthentication(): Promise<void> {
+    return this.userManager.signinRedirectCallback().then(user => {
+      this.user = user;
+      console.log('auth done');
+      console.log(user);
     });
   }
 }

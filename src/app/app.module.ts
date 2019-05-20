@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ConfigService } from './config.service';
+import { AuthCallbackComponent } from './auth-callback/auth-callback.component';
 
 export function loadConfig(config: ConfigService) {
   console.log(config);
@@ -11,7 +12,7 @@ export function loadConfig(config: ConfigService) {
 }
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, AuthCallbackComponent],
   imports: [BrowserModule, HttpClientModule, AppRoutingModule],
   providers: [
     ConfigService,
